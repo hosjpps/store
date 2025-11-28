@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "title": "Attack on Titan (Атака титанов), Том 1",
+    "author": "Hajime Isayama",
+    "type": "Манга",
+    "genre": "Сёнэн, Экшен",
+    "price": 510,
+    "image": "/covers/attack-on-titan.jpeg",
+    "description": "Человечество живёт за огромными стенами, чтобы защититься от титанов — гигантов-людоедов. История о борьбе за свободу начинается здесь.",
+    "rating": 4.9
+  },
+  {
+    "id": 2,
+    "title": "One Piece, Том 1",
+    "author": "Eiichiro Oda",
+    "type": "Манга",
+    "genre": "Приключения, Сёнэн",
+    "price": 510,
+    "image": "/covers/one-piece.jpeg",
+    "description": "Монки Д. Луффи отправляется в опасное путешествие, чтобы стать Королём пиратов и найти легендарное сокровище — One Piece.",
+    "rating": 4.8
+  },
+  {
+    "id": 3,
+    "title": "Re:Zero. Жизнь в альтернативном мире с нуля (Ранобэ, Том 1)",
+    "author": "Tappei Nagatsuki",
+    "type": "Ранобэ",
+    "genre": "Исекай, Фэнтези",
+    "price": 690,
+    "image": "/covers/re-zero.jpeg",
+    "description": "Субару Нацуки оказывается в фэнтезийном мире и узнаёт, что обладает способностью возвращаться в прошлое после смерти.",
+    "rating": 4.7
+  },
+  {
+    "id": 4,
+    "title": "Solo Leveling (Соло Левелинг), Том 1",
+    "author": "Chugong",
+    "type": "Манхва",
+    "genre": "Фэнтези, Экшен",
+    "price": 620,
+    "image": "/covers/solo-leveling.jpeg",
+    "description": "Слабейший охотник Сон Джин Ву получает шанс стать самым сильным, пройдя через систему квестов и испытаний.",
+    "rating": 4.9
+  },
+  {
+    "id": 5,
+    "title": "Death Note (Тетрадь смерти), Том 1",
+    "author": "Tsugumi Ohba",
+    "type": "Манга",
+    "genre": "Триллер, Мистика",
+    "price": 510,
+    "image": "/covers/death-note.jpeg",
+    "description": "Старшеклассник Лайт Ягами находит Тетрадь смерти и решает очистить мир от преступников, но за ним начинает охоту детектив L.",
+    "rating": 4.9
+  },
+  {
+    "id": 6,
+    "title": "Naruto, Том 1",
+    "author": "Masashi Kishimoto",
+    "type": "Манга",
+    "genre": "Сёнэн, Приключения",
+    "price": 510,
+    "image": "/covers/naruto.jpeg",
+    "description": "История о Наруто Удзумаки — мальчике-ниндзя, мечтающем стать Хокаге своего селения.",
+    "rating": 4.8
+  },
+  {
+    "id": 7,
+    "title": "Tokyo Ghoul, Том 1",
+    "author": "Sui Ishida",
+    "type": "Манга",
+    "genre": "Ужасы, Мистика",
+    "price": 510,
+    "image": "/covers/tokio-ghoul.jpeg",
+    "description": "История о студентах, которые сталкиваются с мангулами, и борьба главного героя с самим собой, когда он становится полукровкой.",
+    "rating": 4.7
+  },
+  {
+    "id": 8,
+    "title": "Demon Slayer (Истребитель демонов), Том 1",
+    "author": "Koyoharu Gotouge",
+    "type": "Манга",
+    "genre": "Экшен, Сёнэн",
+    "price": 510,
+    "image": "/covers/demon-slayer.jpeg",
+    "description": "Мальчик по имени Танжиро решает стать охотником на демонов, чтобы отомстить за свою семью и спасти свою сестру, превращенную в демона.",
+    "rating": 4.9
+  },
+  {
+    "id": 9,
+    "title": "My Hero Academia (Моя геройская академия), Том 1",
+    "author": "Kōhei Horikoshi",
+    "type": "Манга",
+    "genre": "Сёнэн, Супергерои",
+    "price": 510,
+    "image": "/covers/my-hero-academia.jpeg",
+    "description": "В мире, где почти все люди обладают особыми силами, молодой парень Изуку Мидория мечтает стать героем и поступить в академию героев.",
+    "rating": 4.8
+  },
+  {
+    "id": 10,
+    "title": "The Rising of the Shield Hero (Щитовой герой), Том 1",
+    "author": "Aneko Yusagi",
+    "type": "Ранобэ",
+    "genre": "Исекай, Фэнтези",
+    "price": 690,
+    "image": "/covers/the-rising-of-shield-hero.jpeg",
+    "description": "Наофуми Иватани, щитовой герой, оказывается в другом мире, где ему предстоит бороться с монстрами и восстанавливать свою репутацию.",
+    "rating": 4.6
+  },
+  {
+    "id": 11,
+    "title": "Kaguya-sama: Love is War (Кагуя-сама: Любовь - это война), Том 1",
+    "author": "Aka Akasaka",
+    "type": "Манга",
+    "genre": "Комедия, Романтика",
+    "price": 510,
+    "image": "/covers/kagua-sama.jpeg",
+    "description": "Кагуя и Широэганы — два гениальных ученика, которые занимаются играми и манипуляциями в любви, пытаясь заставить другого признаться первым.",
+    "rating": 4.8
+  },
+  {
+    "id": 12,
+    "title": "Overlord, Том 1",
+    "author": "Kugane Maruyama",
+    "type": "Ранобэ",
+    "genre": "Исекай, Фэнтези",
+    "price": 690,
+    "image": "/covers/overlord.jpeg",
+    "description": "Игрок, оказавшийся в теле своего персонажа в фэнтезийном мире, решает завоевать этот мир и установить свой порядок, будучи могущественным скелетом-магистром.",
+    "rating": 4.7
+  },
+  {
+    "id": 13,
+    "title": "Vinland Saga, Том 1",
+    "author": "Makoto Yukimura",
+    "type": "Манга",
+    "genre": "История, Экшен",
+    "price": 510,
+    "image": "/covers/vinland-saga.jpeg",
+    "description": "История о викингах, где главный герой Торуфин борется за месть и свою судьбу в мире насилия и войн на фоне истории Северной Европы.",
+    "rating": 4.9
+  },
+  {
+    "id": 14,
+    "title": "Jujutsu Kaisen (Магическая битва), Том 1",
+    "author": "Gege Akutami",
+    "type": "Манга",
+    "genre": "Сёнэн, Экшен",
+    "price": 510,
+    "image": "/covers/jujutsu-kaisen.jpeg",
+    "description": "Юдзи Итадори случайно поглощает проклятый предмет и становится носителем могущественного демона, вступая в мир магов и проклятий.",
+    "rating": 4.8
+  },
+  {
+    "id": 15,
+    "title": "Chainsaw Man (Человек-бензопила), Том 1",
+    "author": "Tatsuki Fujimoto",
+    "type": "Манга",
+    "genre": "Экшен, Ужасы",
+    "price": 510,
+    "image": "/covers/chainsawman.jpeg",
+    "description": "Дэндзи, бедный парень с демоном-бензопилой, получает шанс на лучшую жизнь, став охотником на демонов.",
+    "rating": 4.7
+  }
+]
