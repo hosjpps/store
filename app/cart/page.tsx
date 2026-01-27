@@ -1,22 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
+import { Minus, Plus, Trash2, ShoppingBag, Truck, Shield, Clock, Package, AlertTriangle, Sparkles, X } from "lucide-react"
 import { Header } from "@/components/header"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import { AnimatedBackground } from "@/components/animated-background"
+import { CartPageSkeleton } from "@/components/skeletons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { useStore } from "@/lib/store"
+import { toast } from "sonner"
+
+const FREE_SHIPPING_THRESHOLD = 3000 // Free shipping at 3000₽
 
 export default function CartPage() {
-  const { cart, updateQuantity, removeFromCart, clearCart, addOrder, user } = useStore()
+  const { cart, updateQuantity, removeFromCart, clearCart, addOrder, user, appliedPromoCode, promoDiscount, applyPromoCode, removePromoCode } = useStore()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [promoInput, setPromoInput] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const shippingProgress = Math.min((totalPrice / FREE_SHIPPING_THRESHOLD) * 100, 100)
+  const amountForFreeShipping = FREE_SHIPPING_THRESHOLD - totalPrice
 
   const handleQuantityChange = (productId: number, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -26,99 +53,236 @@ export default function CartPage() {
     }
   }
 
+  const handleApplyPromo = () => {
+    if (!promoInput.trim()) {
+      toast.error("Введите промокод", {
+        description: "Поле промокода не может быть пустым"
+      })
+      return
+    }
+
+    const success = applyPromoCode(promoInput)
+    if (success) {
+      toast.success("Промокод применен!", {
+        description: `Скидка ${promoDiscount || 'рассчитывается'}₽ добавлена к заказу`
+      })
+      setPromoInput("")
+    } else {
+      toast.error("Промокод недействителен", {
+        description: "Проверьте код или условия минимального заказа"
+      })
+    }
+  }
+
+  const handleRemovePromo = () => {
+    removePromoCode()
+    toast.info("Промокод удален")
+  }
+
   const handleCheckout = async () => {
+    // Валидация: пользователь должен быть авторизован
     if (!user) {
-      alert("Войдите в аккаунт для оформления заказа")
+      toast.error("Войдите в аккаунт", {
+        description: "Для оформления заказа необходимо авторизоваться"
+      })
+      return
+    }
+
+    // Валидация: корзина не должна быть пустой
+    if (cart.length === 0) {
+      toast.error("Корзина пуста", {
+        description: "Добавьте товары в корзину для оформления заказа"
+      })
       return
     }
 
     setIsProcessing(true)
-    
-    // Создаем заказ
-    const order = {
-      userId: user.id,
-      items: cart,
-      total: totalPrice,
-      status: 'processing' as const,
-      date: new Date().toLocaleDateString('ru-RU')
+
+    try {
+      // Create order with discount applied
+      const finalTotal = totalPrice - promoDiscount
+      const order = {
+        userId: user.id,
+        items: cart,
+        total: finalTotal,
+        status: 'processing' as const,
+        date: new Date().toLocaleDateString('ru-RU')
+      }
+
+      // Simulate checkout process
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      addOrder(order)
+      clearCart()
+      removePromoCode()
+
+      toast.success("Заказ оформлен!", {
+        description: `Заказ на сумму ${finalTotal.toFixed(0)}₽ успешно создан`
+      })
+    } catch (error) {
+      toast.error("Ошибка оформления", {
+        description: "Произошла ошибка при оформлении заказа. Попробуйте снова."
+      })
+    } finally {
+      setIsProcessing(false)
     }
-    
-    // Имитация процесса оформления заказа
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    
-    addOrder(order)
-    alert("Заказ успешно оформлен! Спасибо за покупку!")
-    clearCart()
-    setIsProcessing(false)
+  }
+
+  if (isLoading) {
+    return (
+      <AnimatedBackground>
+        <Header />
+        <main className="container mx-auto px-4 py-4 md:py-8">
+          <Breadcrumbs items={[{ label: "Корзина" }]} />
+          <CartPageSkeleton />
+        </main>
+      </AnimatedBackground>
+    )
   }
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <AnimatedBackground>
         <Header />
-        <main className="container mx-auto px-4 py-4 md:py-8">
-          <div className="text-center py-8 md:py-12">
-            <ShoppingBag className="h-16 md:h-24 w-16 md:w-24 mx-auto text-muted-foreground mb-4 md:mb-6" />
-            <h1 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Ваша корзина пуста</h1>
-            <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">Добавьте товары из каталога, чтобы начать покупки</p>
-            <Button asChild>
-              <Link href="/">Перейти к покупкам</Link>
-            </Button>
+        <main className="container mx-auto px-4 py-8 md:py-16">
+          <div className="max-w-md mx-auto text-center">
+            {/* Glass morphism empty state card */}
+            <div className="glass rounded-2xl p-8 md:p-12 animate-scale-in">
+              {/* Animated icon */}
+              <div className="relative w-32 h-32 mx-auto mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl animate-pulse" />
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <ShoppingBag className="w-16 h-16 text-muted-foreground/50" />
+                </div>
+              </div>
+
+              <h1 className="text-2xl md:text-3xl font-bold mb-3">
+                <span className="gradient-text">Корзина</span> пуста
+              </h1>
+              <p className="text-muted-foreground mb-6">
+                Добавьте товары из каталога, чтобы начать покупки
+              </p>
+
+              <Button asChild size="lg" className="btn-glow glow-pulse">
+                <Link href="/">
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Перейти к покупкам
+                </Link>
+              </Button>
+            </div>
           </div>
         </main>
-      </div>
+      </AnimatedBackground>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <AnimatedBackground>
       <Header />
 
       <main className="container mx-auto px-4 py-4 md:py-8">
-        {/* Навигация назад */}
-        <Button variant="ghost" asChild className="mb-4 md:mb-6 p-0 h-auto">
-          <Link href="/">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Продолжить покупки</span>
-            <span className="sm:hidden">Назад</span>
-          </Link>
-        </Button>
+        <Breadcrumbs items={[
+          { label: "Корзина" }
+        ]} />
 
         <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
-          {/* Список товаров в корзине */}
-          <div className="lg:col-span-2 space-y-3 md:space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 md:mb-6 gap-3">
-              <h1 className="text-xl md:text-2xl font-bold">Корзина ({totalItems})</h1>
-              <Button variant="outline" onClick={clearCart} className="text-destructive bg-transparent w-full sm:w-auto">
-                <Trash2 className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Очистить корзину</span>
-                <span className="sm:hidden">Очистить</span>
-              </Button>
+          {/* Cart items list */}
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
+            {/* Header with clear cart button */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold">
+                <span className="gradient-text">Корзина</span> ({totalItems})
+              </h1>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" className="text-destructive bg-transparent hover:bg-destructive/10 w-full sm:w-auto glass">
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    <span className="hidden sm:inline">Очистить корзину</span>
+                    <span className="sm:hidden">Очистить</span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="glass">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="flex items-center gap-2">
+                      <AlertTriangle className="h-5 w-5 text-destructive" />
+                      Очистить корзину?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Все товары будут удалены из корзины. Это действие нельзя отменить.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="glass">Отмена</AlertDialogCancel>
+                    <AlertDialogAction onClick={clearCart} className="bg-destructive hover:bg-destructive/90">
+                      Очистить
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
 
-            {cart.map((item) => (
-              <Card key={item.id} className="overflow-hidden">
+            {/* Free shipping progress bar */}
+            <Card className="glass border-primary/20 overflow-hidden">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 rounded-full bg-primary/10">
+                    <Truck className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    {amountForFreeShipping > 0 ? (
+                      <p className="text-sm font-medium">
+                        До бесплатной доставки осталось <span className="text-primary font-bold">{amountForFreeShipping.toFixed(0)}₽</span>
+                      </p>
+                    ) : (
+                      <p className="text-sm font-medium text-green-600">
+                        Поздравляем! Вы получили бесплатную доставку!
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {/* Progress bar */}
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${shippingProgress}%` }}
+                  />
+                </div>
+                <div className="flex justify-between mt-1 text-xs text-muted-foreground">
+                  <span>0₽</span>
+                  <span>{FREE_SHIPPING_THRESHOLD}₽</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Cart items */}
+            {cart.map((item, index) => (
+              <Card
+                key={item.id}
+                className="glass border-primary/10 overflow-hidden group hover:border-primary/30 transition-all duration-300 animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <CardContent className="p-4">
                   <div className="flex gap-4">
-                    {/* Изображение товара */}
+                    {/* Product image */}
                     <Link href={`/product/${item.id}`} className="flex-shrink-0">
-                      <div className="relative w-20 h-28 overflow-hidden rounded-md bg-muted">
+                      <div className="relative w-20 h-28 overflow-hidden rounded-lg bg-muted group-hover:scale-105 transition-transform duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                         <Image src={item.image || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
                       </div>
                     </Link>
 
-                    {/* Информация о товаре */}
+                    {/* Product info */}
                     <div className="flex-1 space-y-2">
                       <div className="flex items-start justify-between">
                         <div>
                           <Link href={`/product/${item.id}`}>
-                            <h3 className="font-semibold hover:text-primary transition-colors line-clamp-2">
+                            <h3 className="font-semibold hover:text-primary transition-colors line-clamp-2 group-hover:text-primary">
                               {item.title}
                             </h3>
                           </Link>
                           <p className="text-sm text-muted-foreground">{item.author}</p>
                           <div className="flex gap-2 mt-1">
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary" className="text-xs bg-primary/10 text-primary border-none">
                               {item.type}
                             </Badge>
                             <Badge variant="outline" className="text-xs">
@@ -130,13 +294,13 @@ export default function CartPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => removeFromCart(item.id)}
-                          className="text-destructive hover:text-destructive"
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10 transition-colors"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
 
-                      {/* Управление количеством и цена */}
+                      {/* Quantity and price */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Button
@@ -144,6 +308,7 @@ export default function CartPage() {
                             size="sm"
                             onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
+                            className="h-8 w-8 p-0 min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 hover:bg-primary/10 hover:border-primary/50"
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
@@ -152,12 +317,13 @@ export default function CartPage() {
                             variant="outline"
                             size="sm"
                             onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                            className="h-8 w-8 p-0 min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 hover:bg-primary/10 hover:border-primary/50"
                           >
                             <Plus className="h-3 w-3" />
                           </Button>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-primary">{(item.price * item.quantity).toFixed(2)}₽</div>
+                          <div className="font-bold text-lg gradient-text">{(item.price * item.quantity).toFixed(2)}₽</div>
                           <div className="text-sm text-muted-foreground">{item.price}₽ за шт.</div>
                         </div>
                       </div>
@@ -168,32 +334,95 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* Сводка заказа */}
+          {/* Order summary */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24">
+            <Card className="glass border-primary/20 sticky top-24 overflow-hidden">
+              {/* Gradient accent at top */}
+              <div className="h-1 bg-gradient-to-r from-primary via-accent to-primary" />
               <CardContent className="p-6 space-y-4">
-                <h2 className="text-xl font-bold">Итого</h2>
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <Package className="h-5 w-5 text-primary" />
+                  Итого
+                </h2>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span>Товары ({totalItems} шт.)</span>
+                    <span className="text-muted-foreground">Товары ({totalItems} шт.)</span>
                     <span>{totalPrice.toFixed(2)}₽</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Доставка</span>
-                    <span className="text-green-600">Бесплатно</span>
+                    <span className="text-muted-foreground">Доставка</span>
+                    {amountForFreeShipping > 0 ? (
+                      <span>от 299₽</span>
+                    ) : (
+                      <span className="text-green-600 font-medium">Бесплатно</span>
+                    )}
                   </div>
+                  {promoDiscount > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Скидка</span>
+                      <span className="text-green-600 font-medium">-{promoDiscount}₽</span>
+                    </div>
+                  )}
                 </div>
 
-                <Separator />
+                <Separator className="bg-border/50" />
+
+                {/* Promo Code Section */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Промокод</label>
+                  {appliedPromoCode ? (
+                    <div className="flex items-center justify-between p-2 rounded-lg bg-green-500/10 border border-green-500/20">
+                      <div>
+                        <span className="font-medium text-green-600">{appliedPromoCode}</span>
+                        <span className="text-sm text-muted-foreground ml-2">-{promoDiscount}₽</span>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={handleRemovePromo}>
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Введите промокод"
+                        value={promoInput}
+                        onChange={(e) => setPromoInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                      />
+                      <Button onClick={handleApplyPromo}>Применить</Button>
+                    </div>
+                  )}
+                </div>
+
+                <Separator className="bg-border/50" />
 
                 <div className="flex justify-between text-lg font-bold">
                   <span>К оплате</span>
-                  <span className="text-primary">{totalPrice.toFixed(2)}₽</span>
+                  <span className="gradient-text text-xl">{(totalPrice - promoDiscount).toFixed(2)}₽</span>
                 </div>
 
-                <Button onClick={handleCheckout} disabled={isProcessing} className="w-full" size="lg">
-                  {isProcessing ? "Обработка..." : "Оформить заказ"}
+                {!user && (
+                  <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-sm">
+                    <p className="text-amber-600 dark:text-amber-400">
+                      Войдите в аккаунт для оформления заказа
+                    </p>
+                  </div>
+                )}
+
+                <Button
+                  onClick={handleCheckout}
+                  disabled={isProcessing || !user}
+                  className="w-full btn-glow glow-pulse"
+                  size="lg"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      Обработка...
+                    </>
+                  ) : (
+                    "Оформить заказ"
+                  )}
                 </Button>
 
                 <div className="text-xs text-muted-foreground text-center">
@@ -202,26 +431,37 @@ export default function CartPage() {
               </CardContent>
             </Card>
 
-            {/* Преимущества */}
-            <Card className="mt-4">
+            {/* Benefits card */}
+            <Card className="glass border-primary/10 mt-4 overflow-hidden">
               <CardContent className="p-4">
-                <h3 className="font-semibold mb-3">Почему выбирают нас?</h3>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Бесплатная доставка от €50</span>
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-accent" />
+                  Почему выбирают нас?
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 group">
+                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <Truck className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm text-muted-foreground">Бесплатная доставка от 3000₽</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Гарантия качества</span>
+                  <div className="flex items-center gap-3 group">
+                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <Shield className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm text-muted-foreground">Гарантия качества</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Быстрая доставка 1-3 дня</span>
+                  <div className="flex items-center gap-3 group">
+                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <Clock className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm text-muted-foreground">Быстрая доставка 1-3 дня</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Возврат в течение 14 дней</span>
+                  <div className="flex items-center gap-3 group">
+                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <Package className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="text-sm text-muted-foreground">Возврат в течение 14 дней</span>
                   </div>
                 </div>
               </CardContent>
@@ -229,6 +469,6 @@ export default function CartPage() {
           </div>
         </div>
       </main>
-    </div>
+    </AnimatedBackground>
   )
 }

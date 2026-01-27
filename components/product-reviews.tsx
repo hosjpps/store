@@ -11,6 +11,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import reviews from '@/data/reviews.json'
 import { Review } from '@/types/index'
 
+interface UserReview extends Review {
+  productId: number;
+}
+
 interface ProductReviewsProps {
   productId: number;
   totalCount?: number;
@@ -29,7 +33,7 @@ export function ProductReviews({ productId, totalCount, averageRating }: Product
   
   useEffect(() => {
     const savedReviews = JSON.parse(localStorage.getItem('userReviews') || '[]');
-    const productUserReviews = savedReviews.filter((review: any) => review.productId === productId);
+    const productUserReviews = savedReviews.filter((review: UserReview) => review.productId === productId);
     setUserReviews(productUserReviews);
   }, [productId]);
   
