@@ -9,7 +9,7 @@ import { Header } from "@/components/header"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { ProductCard } from "@/components/product-card"
 import { ProductReviews } from "@/components/product-reviews";
-import { AnimatedBackground, FloatingMangaPage, StarBurst, Sparkle } from "@/components/animated-background"
+import { AnimatedBackground } from "@/components/animated-background"
 import { ProductPageSkeleton } from "@/components/skeletons"
 import reviews from "@/data/reviews.json";
 import { Button } from "@/components/ui/button"
@@ -135,12 +135,6 @@ export default function ProductPage() {
   return (
     <AnimatedBackground className="min-h-screen">
       <Header />
-
-      {/* Decorative floating elements */}
-      <FloatingMangaPage className="top-32 right-8 opacity-40 hidden lg:block" />
-      <StarBurst className="top-40 left-16 hidden lg:block" />
-      <Sparkle className="top-64 right-1/4 hidden md:block" size={24} />
-      <Sparkle className="bottom-1/3 left-1/4 hidden md:block" size={16} />
 
       <main className="container mx-auto px-4 py-4 md:py-8">
         <Breadcrumbs items={[
