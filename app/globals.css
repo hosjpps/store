@@ -11,37 +11,37 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   /* Anime-inspired vibrant colors */
-  --primary: oklch(0.55 0.25 285); /* Deep purple */
+  --primary: oklch(0.55 0.25 330); /* Deep purple */
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.95 0.02 280);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.96 0.01 280);
   --muted-foreground: oklch(0.5 0 0);
-  --accent: oklch(0.60 0.22 285); /* Vibrant purple (matching primary) */
+  --accent: oklch(0.60 0.22 330); /* Vibrant purple (matching primary) */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.9 0.02 280);
   --input: oklch(0.95 0.01 280);
-  --ring: oklch(0.55 0.25 285);
-  --chart-1: oklch(0.55 0.25 285);
-  --chart-2: oklch(0.65 0.22 285);
+  --ring: oklch(0.55 0.25 330);
+  --chart-1: oklch(0.55 0.25 330);
+  --chart-2: oklch(0.65 0.22 330);
   --chart-3: oklch(0.6 0.2 200);
   --chart-4: oklch(0.7 0.15 60);
   --chart-5: oklch(0.5 0.2 150);
   --radius: 0.75rem;
   --sidebar: oklch(0.12 0.02 280);
   --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.25 285);
+  --sidebar-primary: oklch(0.65 0.25 330);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.2 0.03 280);
   --sidebar-accent-foreground: oklch(0.95 0 0);
   --sidebar-border: oklch(0.25 0.02 280);
-  --sidebar-ring: oklch(0.55 0.25 285);
+  --sidebar-ring: oklch(0.55 0.25 330);
 
   /* Custom anime gradients */
-  --gradient-1: oklch(0.55 0.25 285);
-  --gradient-2: oklch(0.65 0.22 285);
+  --gradient-1: oklch(0.55 0.25 330);
+  --gradient-2: oklch(0.65 0.22 330);
   --gradient-3: oklch(0.6 0.22 250);
   --gradient-4: oklch(0.7 0.18 200);
 }
@@ -53,21 +53,21 @@
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.12 0.02 280);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.7 0.22 285);
+  --primary: oklch(0.7 0.22 330);
   --primary-foreground: oklch(0.1 0 0);
   --secondary: oklch(0.2 0.02 280);
   --secondary-foreground: oklch(0.95 0 0);
   --muted: oklch(0.2 0.02 280);
   --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.75 0.20 285); /* Vibrant purple (matching primary) */
+  --accent: oklch(0.75 0.20 330); /* Vibrant purple (matching primary) */
   --accent-foreground: oklch(0.1 0 0);
   --destructive: oklch(0.5 0.2 25);
   --destructive-foreground: oklch(0.95 0 0);
   --border: oklch(0.25 0.02 280);
   --input: oklch(0.2 0.02 280);
-  --ring: oklch(0.7 0.22 285);
-  --chart-1: oklch(0.7 0.22 285);
-  --chart-2: oklch(0.75 0.20 285);
+  --ring: oklch(0.7 0.22 330);
+  --chart-1: oklch(0.7 0.22 330);
+  --chart-2: oklch(0.75 0.20 330);
   --chart-3: oklch(0.7 0.18 200);
   --chart-4: oklch(0.75 0.15 60);
   --chart-5: oklch(0.6 0.18 150);
@@ -266,10 +266,10 @@
 
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px oklch(0.55 0.25 285 / 0.3);
+    box-shadow: 0 0 20px oklch(0.55 0.25 330 / 0.3);
   }
   50% {
-    box-shadow: 0 0 40px oklch(0.55 0.25 285 / 0.6);
+    box-shadow: 0 0 40px oklch(0.55 0.25 330 / 0.6);
   }
 }
 
@@ -291,8 +291,8 @@
   .gradient-text {
     background: linear-gradient(
       135deg,
-      oklch(0.55 0.25 285),
-      oklch(0.65 0.22 285),
+      oklch(0.55 0.25 330),
+      oklch(0.65 0.22 330),
       oklch(0.6 0.22 250)
     );
     background-size: 200% 200%;
@@ -337,7 +337,7 @@
   .particle-1 {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, oklch(0.55 0.25 285 / 0.1), transparent 70%);
+    background: radial-gradient(circle, oklch(0.55 0.25 330 / 0.1), transparent 70%);
     top: 10%;
     left: 10%;
     animation-delay: 0s;
@@ -346,7 +346,7 @@
   .particle-2 {
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, oklch(0.55 0.15 285 / 0.08), transparent 70%);
+    background: radial-gradient(circle, oklch(0.55 0.15 330 / 0.08), transparent 70%);
     top: 60%;
     right: 10%;
     animation-delay: -5s;
@@ -392,8 +392,8 @@
   .anime-card-hover:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow:
-      0 25px 50px -12px oklch(0.55 0.25 285 / 0.25),
-      0 0 0 1px oklch(0.55 0.25 285 / 0.1);
+      0 25px 50px -12px oklch(0.55 0.25 330 / 0.25),
+      0 0 0 1px oklch(0.55 0.25 330 / 0.1);
   }
 
   .anime-card-hover:active {
@@ -463,11 +463,11 @@
 
   /* Glow Effects */
   .glow-primary {
-    box-shadow: 0 0 20px oklch(0.55 0.25 285 / 0.4);
+    box-shadow: 0 0 20px oklch(0.55 0.25 330 / 0.4);
   }
 
   .glow-accent {
-    box-shadow: 0 0 20px oklch(0.65 0.22 285 / 0.4);
+    box-shadow: 0 0 20px oklch(0.65 0.22 330 / 0.4);
   }
 
   .glow-pulse {
@@ -500,7 +500,7 @@
   }
 
   .btn-glow:hover {
-    box-shadow: 0 0 30px oklch(0.55 0.25 285 / 0.5);
+    box-shadow: 0 0 30px oklch(0.55 0.25 330 / 0.5);
   }
 
   /* Gradient Border */
@@ -518,8 +518,8 @@
     padding: 2px;
     background: linear-gradient(
       135deg,
-      oklch(0.55 0.25 285),
-      oklch(0.65 0.22 285),
+      oklch(0.55 0.25 330),
+      oklch(0.65 0.22 330),
       oklch(0.6 0.22 250)
     );
     background-size: 200% 200%;
@@ -591,7 +591,7 @@
     right: 0;
     width: 100px;
     height: 100px;
-    background: linear-gradient(135deg, oklch(0.55 0.25 285 / 0.1), transparent);
+    background: linear-gradient(135deg, oklch(0.55 0.25 330 / 0.1), transparent);
     border-radius: 0 0 0 100%;
   }
 
@@ -621,7 +621,7 @@
     transform: translateY(-50%);
     width: 4px;
     height: 60%;
-    background: oklch(0.65 0.25 285);
+    background: oklch(0.65 0.25 330);
     border-radius: 0 4px 4px 0;
   }
 
@@ -632,7 +632,7 @@
 
   /* Tooltip Glow */
   .tooltip-glow {
-    box-shadow: 0 0 20px oklch(0.55 0.25 285 / 0.3);
+    box-shadow: 0 0 20px oklch(0.55 0.25 330 / 0.3);
   }
 
   /* Image Shine Effect */
@@ -687,12 +687,12 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: oklch(0.7 0.1 285);
+    background: oklch(0.7 0.1 330);
     border-radius: 4px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.55 0.25 285);
+    background: oklch(0.55 0.25 330);
   }
 
   .dark .custom-scrollbar::-webkit-scrollbar-track {
@@ -700,7 +700,7 @@
   }
 
   .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: oklch(0.4 0.1 285);
+    background: oklch(0.4 0.1 330);
   }
 }
 
@@ -733,7 +733,7 @@
   }
 
   .bg-dots {
-    background-image: radial-gradient(oklch(0.8 0.05 285 / 0.3) 1px, transparent 1px);
+    background-image: radial-gradient(oklch(0.8 0.05 330 / 0.3) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 
